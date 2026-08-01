@@ -8,6 +8,8 @@ import env from "./config/env.js";
 import routes from "./routes/index.js";
 import notFound from "./middleware/notFound.middleware.js";
 import errorHandler from "./middleware/error.middleware.js";
+import { API_VERSION } from "./constants/api.constants.js";
+import { MESSAGES } from "./constants/message.constants.js";
 
 const app = express();
 
@@ -27,7 +29,7 @@ app.use(morgan(env.nodeEnv === "development" ? "dev" : "combined"));
 | API Routes
 |--------------------------------------------------------------------------
 */
-app.use("/api/v1", routes);
+app.use(API_VERSION, routes);
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +39,7 @@ app.use("/api/v1", routes);
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "Welcome to TogetherPad API 🚀",
+    message: MESSAGES.WELCOME,
   });
 });
 

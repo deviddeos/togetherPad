@@ -1,7 +1,9 @@
+import { MESSAGES } from "../constants/message.constants.js";
+
 const getHealthStatus = (req, res) => {
   res.status(200).json({
     success: true,
-    message: "Server is running",
+    message: MESSAGES.SERVER_RUNNING,
     timestamp: new Date().toISOString(),
   });
 };
