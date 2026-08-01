@@ -9,7 +9,7 @@ import routes from "./routes/index.js";
 import notFound from "./middleware/notFound.middleware.js";
 import errorHandler from "./middleware/error.middleware.js";
 import { API_VERSION } from "./constants/api.constants.js";
-import { MESSAGES } from "./constants/message.constants.js";
+import { SERVER_MESSAGES } from "./constants/message.constants.js";
 
 const app = express();
 
@@ -39,7 +39,7 @@ app.use(API_VERSION, routes);
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: MESSAGES.WELCOME,
+    message: SERVER_MESSAGES.WELCOME,
   });
 });
 
