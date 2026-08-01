@@ -1,3 +1,4 @@
+// Four parameters required — Express identifies this as error middleware
 const errorHandler = (err, req, res, next) => {
   console.error(err);
 

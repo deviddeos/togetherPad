@@ -35,11 +35,9 @@ app.use(
 // Request Logger
 app.use(morgan("dev"));
 
-/*
-|--------------------------------------------------------------------------
-| Routes
-|--------------------------------------------------------------------------
-*/
+import routes from "./routes/index.js";
+import notFound from "./middleware/notFound.middleware.js";
+import errorHandler from "./middleware/error.middleware.js";
 
 app.get("/", (req, res) => {
   res.json({
