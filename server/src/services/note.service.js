@@ -11,7 +11,7 @@ const createNoteService = async ({ slug, visibility, password }) => {
   const existingNote = await Note.findOne({ slug: normalizedSlug });
 
   if (existingNote) {
-    throw new ApiError(HTTP_STATUS.CONFLICT, NOTE_MESSAGES.SLUG_CONFLICT);
+    throw new ApiError(HTTP_STATUS.CONFLICT, NOTE_MESSAGES.SLUG_EXISTS);
   }
 
   let hashedPassword = null;

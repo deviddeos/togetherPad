@@ -1,14 +1,27 @@
-import Joi from "joi";
+import { z } from "zod";
 import { NOTE_VISIBILITY } from "../constants/note.constants.js";
 
-export const createNoteSchema = Joi.object({
-  slug: Joi.string().trim().min(1).max(100).required(),
-  visibility: Joi.string()
-    .valid(...Object.values(NOTE_VISIBILITY))
-    .default(NOTE_VISIBILITY.PUBLIC),
-  password: Joi.when("visibility", {
-    is: NOTE_VISIBILITY.PROTECTED,
-    then: Joi.string().min(4).required(),
-    otherwise: Joi.any().strip(), // remove password field if not protected
-  }),
-});
+export const createNoteSchema = z
+  .object({
+    slug: z
+      .string()
+      .trim()
+      .min(3, "Slug must be at least 3 characters.")
+      .max(100, "Slug cannot exceed 100 characters."),
+
+    visibility: z.enum([NOTE_VISIBILITY.PUBLIC, NOTE_VISIBILITY.PROTECTED]),
+
+    password: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (
+      data.visibility === NOTE_VISIBILITY.PROTECTED &&
+      (!data.password || data.password.length < 6)
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["password"],
+        message: "Password must be at least 6 characters.",
+      });
+    }
+  });

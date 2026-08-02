@@ -5,7 +5,7 @@ import { NOTE_MESSAGES } from "../constants/message.constants.js";
 
 const createNote = async (req, res, next) => {
   try {
-    const note = await createNoteService(req.body);
+    const note = await createNoteService(req.validatedData);
 
     res
       .status(HTTP_STATUS.CREATED)
