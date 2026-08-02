@@ -1,4 +1,4 @@
-import { createNoteService } from "../services/note.service.js";
+import { createNoteService, getNoteService } from "../services/note.service.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import { HTTP_STATUS } from "../constants/api.constants.js";
 import { NOTE_MESSAGES } from "../constants/message.constants.js";
@@ -15,4 +15,16 @@ const createNote = async (req, res, next) => {
   }
 };
 
-export { createNote };
+const getNote = async (req, res, next) => {
+  try {
+    const result = await getNoteService(req.params.slug);
+
+    res
+      .status(HTTP_STATUS.OK)
+      .json(new ApiResponse(HTTP_STATUS.OK, NOTE_MESSAGES.FETCHED, result));
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { createNote, getNote };

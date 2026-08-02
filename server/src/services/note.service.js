@@ -29,4 +29,20 @@ const createNoteService = async ({ slug, visibility, password }) => {
   return note;
 };
 
-export { createNoteService };
+const getNoteService = async (slug) => {
+  const normalizedSlug = slug.trim().toLowerCase();
+
+  const note = await Note.findOne({ slug: normalizedSlug });
+
+  if (!note) {
+    return { exists: false, slug: normalizedSlug };
+  }
+
+  if (note.visibility === NOTE_VISIBILITY.PROTECTED) {
+    return { exists: true, requiresPassword: true, slug: note.slug };
+  }
+
+  return { exists: true, requiresPassword: false, note };
+};
+
+export { createNoteService, getNoteService };
