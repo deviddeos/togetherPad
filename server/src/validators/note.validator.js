@@ -25,3 +25,7 @@ export const createNoteSchema = z
       });
     }
   });
+
+export const updateContentSchema = z.object({
+  content: z.string(),
+});
