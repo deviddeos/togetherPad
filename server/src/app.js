@@ -7,7 +7,6 @@ import env from "./config/env.js";
 import routes from "./routes/index.js";
 import notFound from "./middleware/notFound.middleware.js";
 import errorHandler from "./middleware/error.middleware.js";
-import { API_VERSION } from "./constants/api.constants.js";
 import { SERVER_MESSAGES } from "./constants/message.constants.js";
 
 const app = express();
@@ -24,10 +23,10 @@ app.use(morgan(env.nodeEnv === "development" ? "dev" : "combined"));
 
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| API Routes — /api → /v1 → resource routes
 |--------------------------------------------------------------------------
 */
-app.use(API_VERSION, routes);
+app.use("/api", routes);
 
 /*
 |--------------------------------------------------------------------------

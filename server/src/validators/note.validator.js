@@ -29,3 +29,4 @@ export const createNoteSchema = z
 export const updateContentSchema = z.object({
   content: z.string(),
 });
+// updateContentSchema moved to validators/updateContent.validator.js

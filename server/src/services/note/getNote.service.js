@@ -1,5 +1,5 @@
 import Note from "../../models/Note.js";
-import { NOTE_VISIBILITY } from "../../constants/note.constants.js";
+import { NOTE_VISIBILITY, NOTE_STATES } from "../../constants/note.constants.js";
 
 const getNoteService = async (slug) => {
   const normalizedSlug = slug.trim().toLowerCase();
@@ -7,23 +7,21 @@ const getNoteService = async (slug) => {
   const note = await Note.findOne({ slug: normalizedSlug });
 
   if (!note) {
-    return { exists: false, slug: normalizedSlug };
+    return { state: NOTE_STATES.NOT_FOUND, slug: normalizedSlug };
   }
 
   if (note.visibility === NOTE_VISIBILITY.PROTECTED) {
-    return { exists: true, requiresPassword: true, slug: note.slug };
+    return { state: NOTE_STATES.PASSWORD_REQUIRED, slug: note.slug };
   }
 
   return {
-    exists: true,
-    requiresPassword: false,
+    state: NOTE_STATES.PUBLIC,
     note: {
       slug: note.slug,
       content: note.content,
       visibility: note.visibility,
       updatedAt: note.updatedAt,
     },
-    permissions: { canRead: true, canWrite: true },
   };
 };
 
