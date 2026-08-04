@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 
 import env from "./config/env.js";
+import sessionMiddleware from "./config/session.js";
 import routes from "./routes/index.js";
 import notFound from "./middleware/notFound.middleware.js";
 import errorHandler from "./middleware/error.middleware.js";
@@ -23,6 +24,7 @@ app.use(cors({ origin: env.clientOrigin, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan(env.nodeEnv === "development" ? "dev" : "combined"));
+app.use(sessionMiddleware);
 
 /*
 |--------------------------------------------------------------------------

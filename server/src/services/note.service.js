@@ -45,4 +45,27 @@ const getNoteService = async (slug) => {
   return { exists: true, requiresPassword: false, note };
 };
 
-export { createNoteService, getNoteService };
+const verifyPasswordService = async ({ slug, password }) => {
+  const normalizedSlug = slug.trim().toLowerCase();
+
+  const note = await Note.findOne({ slug: normalizedSlug }).select("+password");
+
+  if (!note) {
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, NOTE_MESSAGES.NOT_FOUND);
+  }
+
+  // Public notes don't need verification — grant access directly
+  if (note.visibility === NOTE_VISIBILITY.PUBLIC) {
+    return note;
+  }
+
+  const isValid = await bcrypt.compare(password, note.password);
+
+  if (!isValid) {
+    throw new ApiError(HTTP_STATUS.UNAUTHORIZED, NOTE_MESSAGES.PASSWORD_INCORRECT);
+  }
+
+  return note;
+};
+
+export { createNoteService, getNoteService, verifyPasswordService };

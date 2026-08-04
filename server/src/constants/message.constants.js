@@ -13,6 +13,8 @@ export const NOTE_MESSAGES = Object.freeze({
   SLUG_EXISTS: "A note with this slug already exists.",
   PASSWORD_REQUIRED: "Password is required for protected notes.",
   PASSWORD_INCORRECT: "Incorrect password.",
+  PASSWORD_VERIFIED: "Password verified successfully.",
+  ACCESS_DENIED: "Password verification required.",
 });
 
 export const COMMON_MESSAGES = Object.freeze({
