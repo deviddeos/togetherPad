@@ -4,6 +4,7 @@ const env = {
   mongoUri: process.env.MONGO_URI,
   nodeEnv: process.env.NODE_ENV || "development",
   clientOrigin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
+  sessionSecret: process.env.SESSION_SECRET,
 };
 
 export default env;
