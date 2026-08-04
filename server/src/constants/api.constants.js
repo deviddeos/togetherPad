@@ -8,5 +8,3 @@ export const HTTP_STATUS = Object.freeze({
   CONFLICT: 409,
   INTERNAL_SERVER_ERROR: 500,
 });
-
-export const API_VERSION = "/api/v1";
