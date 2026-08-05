@@ -1,1 +1,7 @@
-// App.jsx is intentionally empty — routing is handled by RouterProvider in main.jsx
+import AppRoutes from "./routes/AppRoutes";
+
+function App() {
+  return <AppRoutes />;
+}
+
+export default App;
