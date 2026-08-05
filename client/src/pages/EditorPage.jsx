@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getNote } from "../services/noteApi";
 import CreateNoteModal from "../components/editor/CreateNoteModal";
+import NoteEditor from "../components/editor/NoteEditor";
 
 function EditorPage() {
   const { slug } = useParams();
@@ -63,11 +64,7 @@ function EditorPage() {
     );
   }
 
-  return (
-    <div className="min-h-screen p-6">
-      <pre>{note?.content}</pre>
-    </div>
-  );
+  return <NoteEditor note={note} />;
 }
 
 export default EditorPage;
