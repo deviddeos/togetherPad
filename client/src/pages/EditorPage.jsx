@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getNote } from "../services/noteApi";
 import CreateNoteModal from "../components/editor/CreateNoteModal";
 import NoteEditor from "../components/editor/NoteEditor";
@@ -7,11 +7,23 @@ import NoteEditor from "../components/editor/NoteEditor";
 function EditorPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [loading, setLoading] = useState(true);
   const [note, setNote] = useState(null);
+  const [accessToken, setAccessToken] = useState(null);
   const [noteFound, setNoteFound] = useState(true);
 
   useEffect(() => {
+    // Coming back from VerifyPage with note + token already in hand
+    if (location.state?.note) {
+      setNote(location.state.note);
+      setAccessToken(location.state.accessToken);
+      setNoteFound(true);
+      setLoading(false);
+      return;
+    }
+
     fetchNote();
   }, [slug]);
 
@@ -25,9 +37,20 @@ function EditorPage() {
           setNoteFound(true);
           break;
 
-        case "password_required":
-          navigate(`/verify/${slug}`);
+        case "password_required": {
+          const token = sessionStorage.getItem(`note-${slug}`);
+          if (token) {
+            // Token exists from a previous session — but we still need note content.
+            // Re-open is not possible without password, so redirect to verify.
+            // sessionStorage token is only useful for PATCH (auto-save), not for
+            // fetching content. Redirect to verify to get fresh note content.
+            sessionStorage.removeItem(`note-${slug}`);
+            navigate(`/verify/${slug}`, { replace: true });
+          } else {
+            navigate(`/verify/${slug}`, { replace: true });
+          }
           return;
+        }
 
         case "not_found":
           setNoteFound(false);
@@ -51,7 +74,6 @@ function EditorPage() {
     );
   }
 
-  // Note doesn't exist — show create dialog
   if (!noteFound) {
     return (
       <CreateNoteModal
@@ -64,7 +86,7 @@ function EditorPage() {
     );
   }
 
-  return <NoteEditor note={note} />;
+  return <NoteEditor note={note} accessToken={accessToken} />;
 }
 
 export default EditorPage;

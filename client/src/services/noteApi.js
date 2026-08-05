@@ -10,6 +10,11 @@ export const createNote = async (data) => {
   return response.data;
 };
 
+export const openProtectedNote = async (slug, password) => {
+  const response = await api.post(`/notes/${slug}/open`, { password });
+  return response.data;
+};
+
 export const updateContent = async (slug, content, accessToken) => {
   return api.patch(
     `/notes/${slug}/content`,
