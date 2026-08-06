@@ -37,8 +37,9 @@ function NoteEditor({ note, accessToken }) {
 
   const saveContent = async (value) => {
     setSaveStatus(STATUS.SAVING);
+    const token = accessToken ?? sessionStorage.getItem(`note-${note.slug}`);
     try {
-      await updateContent(note.slug, value, accessToken);
+      await updateContent(note.slug, value, token);
       setSaveStatus(STATUS.SAVED);
     } catch {
       setSaveStatus(STATUS.FAILED);

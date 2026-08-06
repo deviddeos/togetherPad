@@ -14,12 +14,16 @@ function EditorPage() {
   const [accessToken, setAccessToken] = useState(null);
   const [noteFound, setNoteFound] = useState(true);
 
+  const resolveNote = (resolvedNote, token = null) => {
+    setNote(resolvedNote);
+    setAccessToken(token);
+    setNoteFound(true);
+  };
+
   useEffect(() => {
     // Coming back from VerifyPage with note + token already in hand
     if (location.state?.note) {
-      setNote(location.state.note);
-      setAccessToken(location.state.accessToken);
-      setNoteFound(true);
+      resolveNote(location.state.note, location.state.accessToken);
       setLoading(false);
       return;
     }
@@ -31,10 +35,9 @@ function EditorPage() {
     try {
       const response = await getNote(slug);
 
-      switch (response.data.state) {
+      switch (response.state) {
         case "public":
-          setNote(response.data.note);
-          setNoteFound(true);
+          resolveNote(response.note);
           break;
 
         case "password_required": {
@@ -78,15 +81,12 @@ function EditorPage() {
     return (
       <CreateNoteModal
         slug={slug}
-        onCreated={(createdNote) => {
-          setNote(createdNote);
-          setNoteFound(true);
-        }}
+        onCreated={(createdNote, token) => resolveNote(createdNote, token ?? null)}
       />
     );
   }
 
-  return <NoteEditor note={note} accessToken={accessToken} />;
+  return note ? <NoteEditor note={note} accessToken={accessToken} /> : null;
 }
 
 export default EditorPage;

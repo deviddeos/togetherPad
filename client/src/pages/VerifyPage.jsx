@@ -15,8 +15,7 @@ function VerifyPage() {
     setLoading(true);
 
     try {
-      const response = await openProtectedNote(slug, password);
-      const { accessToken, note } = response.data;
+      const { accessToken, note } = await openProtectedNote(slug, password);
       sessionStorage.setItem(`note-${slug}`, accessToken);
       navigate(`/n/${slug}`, { state: { note, accessToken }, replace: true });
     } catch (err) {

@@ -24,12 +24,13 @@ function CreateNoteModal({ slug, onCreated }) {
       const payload = { slug, visibility };
       if (visibility === "protected") payload.password = password;
 
-      const response = await createNote(payload);
-      onCreated(response.data);
+      const { note, accessToken } = await createNote(payload);
+      if (accessToken) sessionStorage.setItem(`note-${note.slug}`, accessToken);
+      onCreated(note, accessToken);
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Something went wrong. Please try again."
-      );
+      const data = err.response?.data;
+      const msg = data?.errors?.[0]?.message || data?.message || "Something went wrong. Please try again.";
+      setError(msg);
     } finally {
       setLoading(false);
     }

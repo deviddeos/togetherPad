@@ -5,12 +5,18 @@ import Input from "../components/common/Input";
 
 function HomePage() {
   const [slug, setSlug] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const trimmedSlug = slug.trim();
+    const trimmedSlug = slug.trim().toLowerCase();
     if (!trimmedSlug) return;
+    if (trimmedSlug.length < 3) {
+      setError("Note name must be at least 3 characters.");
+      return;
+    }
+    setError("");
     navigate(`/n/${trimmedSlug}`);
   };
 
@@ -27,8 +33,10 @@ function HomePage() {
           <Input
             placeholder="Enter note name..."
             value={slug}
-            onChange={(e) => setSlug(e.target.value)}
+            onChange={(e) => { setSlug(e.target.value); setError(""); }}
           />
+
+          {error && <p className="text-sm text-red-500">{error}</p>}
 
           <Button type="submit">Go to Note</Button>
         </form>
