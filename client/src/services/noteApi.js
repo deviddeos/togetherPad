@@ -2,17 +2,17 @@ import api from "./api";
 
 export const getNote = async (slug) => {
   const response = await api.get(`/notes/${slug}`);
-  return response.data;
+  return response.data.data;
 };
 
 export const createNote = async (data) => {
   const response = await api.post("/notes", data);
-  return response.data;
+  return response.data.data;
 };
 
 export const openProtectedNote = async (slug, password) => {
   const response = await api.post(`/notes/${slug}/open`, { password });
-  return response.data;
+  return response.data.data;
 };
 
 export const updateContent = async (slug, content, accessToken) => {
