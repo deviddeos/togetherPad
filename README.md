@@ -86,6 +86,59 @@ Base URL: `/api/v1`
 | `password_required` | Note is protected |
 | `not_found` | Note doesn't exist yet |
 
+## How It Works
+
+```
+                User Opens Website
+                       │
+                       ▼
+                Landing Page (/)
+                       │
+                       ▼
+            Enter Note Slug + Click Go
+                       │
+                       ▼
+          GET /api/v1/notes/:slug
+                       │
+          ┌────────────┴────────────┐
+          │                        │
+          ▼                        ▼
+     Note Exists?            Doesn't Exist
+          │                        │
+          ▼                        ▼
+   Is Protected?           Show Create Dialog
+          │                        │
+     ┌────┴────┐                   ▼
+     │         │           POST /api/v1/notes
+     ▼         ▼                   │
+  Public    Protected              ▼
+     │         │           Redirect to Editor
+     ▼         ▼
+  Editor   Password Screen
+               │
+               ▼
+  POST /api/v1/notes/:slug/open
+               │
+        Password Correct?
+          ┌────┴────┐
+          │         │
+          ▼         ▼
+         Yes        No
+          │         │
+          ▼         ▼
+   Return Access  Show Error
+       Token
+          │
+          ▼
+       Editor
+          │
+          ▼
+   Auto Save (Debounced)
+          │
+          ▼
+  PATCH /api/v1/notes/:slug/content
+```
+
 ## Usage
 
 1. Go to `http://localhost:5173`
