@@ -2,6 +2,7 @@ import { useState } from "react";
 import { createNote } from "../../services/noteApi";
 import Button from "../common/Button";
 import Input from "../common/Input";
+import PasswordInput from "../common/PasswordInput";
 
 function CreateNoteModal({ slug, onCreated }) {
   const [visibility, setVisibility] = useState("public");
@@ -79,8 +80,7 @@ function CreateNoteModal({ slug, onCreated }) {
 
           {/* Password — only for protected */}
           {visibility === "protected" && (
-            <Input
-              type="password"
+            <PasswordInput
               placeholder="Enter password (min 6 characters)"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
