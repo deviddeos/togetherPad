@@ -17,7 +17,14 @@ const app = express();
 |--------------------------------------------------------------------------
 */
 app.use(helmet());
-app.use(cors({ origin: env.clientOrigin, credentials: true }));
+app.use(cors({
+  origin: (origin, callback) => {
+    const allowed = env.clientOrigin.split(",").map((o) => o.trim());
+    if (!origin || allowed.includes(origin)) return callback(null, true);
+    callback(new Error("Not allowed by CORS"));
+  },
+  credentials: true,
+}));
 app.use(express.json());
 app.use(morgan(env.nodeEnv === "development" ? "dev" : "combined"));
 
