@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { openProtectedNote } from "../services/noteApi";
+import PasswordInput from "../components/common/PasswordInput";
 
 function VerifyPage() {
   const { slug } = useParams();
@@ -38,12 +39,10 @@ function VerifyPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <input
-            type="password"
+          <PasswordInput
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2 text-sm outline-none focus:border-black"
             autoFocus
             required
           />
